@@ -25,6 +25,15 @@ def get_region_score_summary(region, exclude_rm_id, superadmin_id):
                         '/',
                         1
                     )::numeric
+                    /
+                    split_part(
+                        ri.score_json::jsonb
+                        -> 'summery_score'
+                        -> 'data'
+                        ->> 'final_score',
+                        '/',
+                        2
+                    )::numeric
                 ELSE
                     (ri.score_json::jsonb
                      -> 'summery_score'
@@ -32,15 +41,17 @@ def get_region_score_summary(region, exclude_rm_id, superadmin_id):
                      ->> 'final_score')::numeric
             END AS score
         FROM investigen.transaction_info ti
-        JOIN investigen.user_master um ON ti.rm_id = um.rm_id
-        JOIN investigen.recorded_info ri ON ti.record_id = ri.record_id
-        WHERE um.region = %s
-          AND um.rm_id <> %s
-          AND um.superadminid = %s
+        JOIN investigen.user_master um
+            ON ti.rm_id = um.rm_id
+        JOIN investigen.recorded_info ri
+            ON ti.record_id = ri.record_id
+        WHERE um.region = 'Mumbai'
+          AND um.rm_id <> 'Mumbai'
+          AND um.superadminid = 'SAB001'
           AND ri.score_json IS NOT NULL
     )
     SELECT
-        ROUND(AVG(score), 2) AS average_score,
+        ROUND(AVG(score), 4) AS average_score,
         MAX(score)          AS best_score,
         MIN(score)          AS worst_score
     FROM rm_scores;
@@ -56,6 +67,9 @@ def get_region_score_summary(region, exclude_rm_id, superadmin_id):
 
 
 if __name__ == "__main__":
-    print(
-        get_region_score_summary("Mumbai", "SAB001", "SAB001")
-    )
+    region = "Mumbai"
+    exclude_rm_id = "SAB001"
+    superadmin_id = "SAB001"
+
+    summary = get_region_score_summary(region, exclude_rm_id, superadmin_id)
+    print(summary)
