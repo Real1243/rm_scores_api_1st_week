@@ -1,11 +1,15 @@
-from fastapi import FastAPI
+from flask import Flask, jsonify
 from services.rm_scores import get_rm_scores_with_extremes
 
-app = FastAPI(title="RM Scores API")
+app = Flask(__name__)
 
-@app.get("/rm-scores")
+@app.route("/rm-scores", methods=["GET"])
 def rm_scores():
-    return get_rm_scores_with_extremes()
+    return jsonify(get_rm_scores_with_extremes())
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
 
 
