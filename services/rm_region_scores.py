@@ -1,3 +1,6 @@
+# Returns Pure Empty List -->
+
+
 from psycopg2.extras import RealDictCursor
 from db_config import get_db_connection
 
