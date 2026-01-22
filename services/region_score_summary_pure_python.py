@@ -1,3 +1,8 @@
+import sys
+import os
+
+# Add project root to Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from psycopg2.extras import RealDictCursor
 from db_config import get_db_connection
 import json
@@ -45,7 +50,7 @@ def get_region_score_summary(region, exclude_rm_id, superadmin_id):
             if not final_score:
                 continue
 
-            # Handle "13/20" or "15"
+            # Handle "13/20" or "15" -->
             if isinstance(final_score, str) and "/" in final_score:
                 score = float(final_score.split("/")[0])
             else:

@@ -73,3 +73,5 @@ if __name__ == "__main__":
 
     summary = get_region_score_summary(region, exclude_rm_id, superadmin_id)
     print(summary)
+
+
