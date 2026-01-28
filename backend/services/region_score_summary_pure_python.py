@@ -20,7 +20,7 @@ def get_region_score_summary(region, exclude_rm_id, superadmin_id):
         JOIN investigen.recorded_info ri ON ti.record_id = ri.record_id
         WHERE um.region = %s
           AND um.rm_id <> %s
-          AND um.superadminid = %s
+          AND um.superadminid = %s 
           AND ri.score_json IS NOT NULL;
     """
 
